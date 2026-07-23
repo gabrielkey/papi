@@ -57,7 +57,7 @@ public:
     void onPlayerJoin(endstone::PlayerJoinEvent &event)
     {
         std::string join_text = "{player_name} joined the server! Their game mode is {player_gamemode}";
-        join_text = papi_->setPlaceholder(event.getPlayer(), join_text);
+        join_text = papi_->setPlaceholders(&event.getPlayer(), join_text);
         event.setJoinMessage(join_text);
     }
     
@@ -91,7 +91,7 @@ class JoinExample(Plugin):
     @event_handler(priority=EventPriority.HIGHEST)
     def on_player_join(self, event: PlayerJoinEvent):
         join_text = "{player_name} joined the server! Their game mode is {player_gamemode}"
-        join_text = self.papi.set_placeholder(event.player, join_text)
+        join_text = self.papi.set_placeholders(event.player, join_text)
         event.join_message = join_text
 ```
 
