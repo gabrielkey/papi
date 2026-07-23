@@ -11,9 +11,17 @@ authors = [
 ]
 description = "A Placeholder API Plugin for Endstone."
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 keywords = ["plugin", "python", "c++", "minecraft", "bedrock", "papi"]
 license = { file = "LICENSE" }
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+]
 
 [project.entry-points."endstone"]
 papi = "endstone_papi:PlaceholderAPIPlugin"
@@ -37,11 +45,14 @@ skip = ["pp*"]
 
 [tool.cibuildwheel.linux]
 manylinux-x86_64-image = "ghcr.io/endstonemc/manylinux_2_31_x86_64"
-environment = { LLVM_VERSION = 16, CC = "/usr/bin/clang", CXX = "/usr/bin/clang++" }
+environment = { LLVM_VERSION = 20, CC = "/usr/bin/clang", CXX = "/usr/bin/clang++" }
 before-all = [
     "apt-get update -y -q && apt-get install -y -q build-essential lsb-release wget software-properties-common gnupg",
     "wget https://apt.llvm.org/llvm.sh && chmod +x llvm.sh && ./llvm.sh ${LLVM_VERSION}",
-    "apt-get install -y -q libc++-${LLVM_VERSION}-dev libc++abi-${LLVM_VERSION}-dev",
+    "apt-get install -y -q libc++-${LLVM_VERSION}-dev libc++abi-${LLVM_VERSION}-dev clang-tools-${LLVM_VERSION}",
     "update-alternatives --install /usr/bin/clang clang /usr/bin/clang-${LLVM_VERSION} 100",
     "update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-${LLVM_VERSION} 100",
 ]
+
+[tool.cibuildwheel.windows]
+environment = { CC = "clang-cl", CXX = "clang-cl" }

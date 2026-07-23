@@ -7,7 +7,7 @@ from endstone_papi import PlaceholderAPI
 
 
 class JoinExample(Plugin):
-    api_version = "0.6"
+    api_version = "0.11"
     soft_depend = ["papi"]
 
     def __init__(self):

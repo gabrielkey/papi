@@ -14,17 +14,17 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ ubuntu-latest, windows-2019 ]
-        python-tag: [ "cp39", "cp310", "cp311", "cp312", "cp313" ]
+        os: [ ubuntu-latest, windows-2022 ]
+        python-tag: [ "cp310", "cp311", "cp312", "cp313", "cp314" ]
         include:
           - os: ubuntu-latest
             platform: manylinux_x86_64
-          - os: windows-2019
+          - os: windows-2022
             platform: win_amd64
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -34,16 +34,22 @@ jobs:
         with:
           arch: x86_64
 
+      # Endstone >= 0.11 requires clang-cl (not plain MSVC) on Windows, see
+      # the compiler check at the top of EndstoneMC/endstone's CMakeLists.txt.
+      - name: Ensure clang-cl is available (Windows)
+        if: runner.os == 'Windows'
+        run: choco install llvm -y --no-progress
+
       - name: Set up CMake and Ninja
         uses: lukka/get-cmake@latest
 
       - name: Build wheels
-        uses: pypa/cibuildwheel@v2.23.0
+        uses: pypa/cibuildwheel@v3.4.1
         env:
           CIBW_BUILD: ${{ matrix.python-tag }}-${{ matrix.platform }}
           CIBW_BUILD_VERBOSITY: 1
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: papi-${{ matrix.python-tag }}-${{ matrix.platform }}
           path: ./wheelhouse/*.whl

@@ -6,7 +6,7 @@ from .papi import PlaceholderAPI
 
 
 class PlaceholderAPIPlugin(Plugin):
-    api_version = "0.6"
+    api_version = "0.11"
 
     commands = {
         "papi": {
